@@ -47,3 +47,7 @@ logs/
 # Temporary files
 *.tmp
 *.temp
+
+# Supabase (backend functions - not for frontend build)
+supabase/functions/
+supabase/
