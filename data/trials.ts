@@ -34,7 +34,6 @@ export const trialCategories = [
   'Language',
   'Finance',
   'Food Delivery',
-  'Dating',
   'Gaming',
 ]
 
@@ -505,20 +504,6 @@ export const verifiedTrials: Trial[] = [
   },
   {
     id: '34',
-    name: 'Midjourney',
-    category: 'AI Tools',
-    trialDays: 0,
-    monthlyPrice: 10.00,
-    rating: 4.9,
-    description: 'AI image generation from text',
-    color: '#000000',
-    signupUrl: 'https://www.midjourney.com/',
-    features: ['Stunning visuals', 'Discord integration', 'High resolution'],
-    popular: true,
-    note: 'NO FREE TRIAL. Basic plan $10/month minimum',
-  },
-  {
-    id: '35',
     name: 'ElevenLabs',
     category: 'AI Tools',
     trialDays: 0,
@@ -1354,37 +1339,7 @@ export const verifiedTrials: Trial[] = [
     note: '30-day free trial',
   },
 
-  // ==================== DATING (2) ====================
-  {
-    id: '94',
-    name: 'Tinder Plus',
-    category: 'Dating',
-    trialDays: 0,
-    monthlyPrice: 9.99,
-    rating: 4.0,
-    description: 'Unlimited likes, rewind, and more',
-    color: '#FD5068',
-    signupUrl: 'https://tinder.com/',
-    features: ['Unlimited likes', 'Rewind', 'Passport'],
-    hasFreeTier: true,
-    note: 'FREE tier available. Plus $9.99/month',
-  },
-  {
-    id: '95',
-    name: 'Bumble Boost',
-    category: 'Dating',
-    trialDays: 0,
-    monthlyPrice: 9.99,
-    rating: 4.1,
-    description: 'See who liked you and extend matches',
-    color: '#FFC107',
-    signupUrl: 'https://bumble.com/',
-    features: ['See admirers', 'Extend matches', 'Unlimited swipes'],
-    hasFreeTier: true,
-    note: 'FREE tier available. Boost $9.99/month',
-  },
-
-  // ==================== GAMING (4) ====================
+  // ==================== GAMING (3) ====================
   {
     id: '96',
     name: 'Xbox Game Pass',
@@ -1414,19 +1369,6 @@ export const verifiedTrials: Trial[] = [
   },
   {
     id: '98',
-    name: 'EA Play',
-    category: 'Gaming',
-    trialDays: 0,
-    monthlyPrice: 4.99,
-    rating: 4.5,
-    description: 'Access to EA games library',
-    color: '#FF4747',
-    signupUrl: 'https://www.ea.com/ea-play',
-    features: ['EA games library', 'Early access', '10% discount'],
-    note: 'NO FREE TRIAL. $1 first month promos sometimes available.',
-  },
-  {
-    id: '99',
     name: 'GeForce NOW',
     category: 'Gaming',
     trialDays: 0,

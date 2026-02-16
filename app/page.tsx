@@ -13,7 +13,7 @@ const stats = [
   { label: 'Active Users', value: '10,000+', icon: TrendingUp },
   { label: 'Money Saved', value: '$2.4M+', icon: CreditCard },
   { label: 'Trials Tracked', value: '50,000+', icon: Sparkles },
-  { label: 'Trial Options', value: '99+', icon: Bell },
+  { label: 'Trial Options', value: '95+', icon: Bell },
 ]
 
 export default function Home() {
@@ -69,7 +69,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-              Discover 99+ verified premium trials worth $2,000+. Track them all in one place. 
+              Discover 95+ verified premium trials worth $2,000+. Track them all in one place. 
               Get smart alerts before you get charged.
             </p>
             
@@ -89,7 +89,7 @@ export default function Home() {
                 onClick={() => document.getElementById('trials')?.scrollIntoView({ behavior: 'smooth' })}
                 className="px-8 py-4 glass rounded-xl font-semibold text-lg hover:bg-white/10 transition-colors"
               >
-                Browse 99+ Verified Trials
+                Browse 95+ Verified Trials
               </motion.button>
             </div>
           </motion.div>
@@ -119,7 +119,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Discover <span className="gradient-text">99+</span> Verified Free Trials
+              Discover <span className="gradient-text">95+</span> Verified Free Trials
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
               Hand-picked, verified trials across 16 categories. Start with confidence, cancel on time, save money.
