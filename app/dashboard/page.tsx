@@ -4,9 +4,10 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { motion } from 'framer-motion'
-import { Plus, Search, Bell, LogOut, CreditCard, Calendar, TrendingUp, Clock, ExternalLink, Trash2 } from 'lucide-react'
+import { Plus, Search, Bell, LogOut, CreditCard, Calendar, TrendingUp, Clock, ExternalLink, Trash2, Crown } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { PLANS } from '@/lib/premium'
 
 interface Trial {
   id: string
@@ -20,6 +21,11 @@ interface Trial {
   created_at: string
 }
 
+interface UserProfile {
+  is_premium: boolean
+  subscription_plan: string
+}
+
 export default function Dashboard() {
   const { user, signOut } = useAuth()
   const router = useRouter()
@@ -27,12 +33,48 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [showAddModal, setShowAddModal] = useState(false)
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [newTrial, setNewTrial] = useState({
     name: '',
     service_url: '',
     monthly_cost: '',
     trial_days: '30',
   })
+
+  // Fetch user profile and trials
+  useEffect(() => {
+    if (!user) {
+      router.push('/login')
+      return
+    }
+
+    fetchUserProfile()
+    fetchTrials()
+  }, [user, router])
+
+  const fetchUserProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', user?.id)
+        .single()
+
+      if (error && error.code === 'PGRST116') {
+        // Profile doesn't exist, create it
+        await supabase.from('user_profiles').insert({
+          id: user?.id,
+          is_premium: false,
+          subscription_plan: 'free'
+        })
+        setUserProfile({ is_premium: false, subscription_plan: 'free' })
+      } else if (data) {
+        setUserProfile(data)
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error)
+    }
+  }
 
   // Fetch trials from Supabase
   useEffect(() => {
@@ -63,6 +105,13 @@ export default function Dashboard() {
 
   const addTrial = async () => {
     if (!newTrial.name) return
+
+    // Check trial limit for free users
+    if (!userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit) {
+      alert(`Free users can only track ${PLANS.FREE.trialLimit} trials. Upgrade to Premium for unlimited tracking!`)
+      router.push('/upgrade')
+      return
+    }
 
     const startDate = new Date()
     const endDate = new Date()
@@ -158,6 +207,25 @@ export default function Dashboard() {
             </div>
             
             <div className="flex items-center gap-4">
+              {/* Upgrade button for free users */}
+              {!userProfile?.is_premium && (
+                <button 
+                  onClick={() => router.push('/upgrade')}
+                  className="px-4 py-2 bg-accent-cyan/20 text-accent-cyan rounded-lg font-semibold text-sm hover:bg-accent-cyan/30 transition-colors flex items-center gap-2"
+                >
+                  <Crown className="w-4 h-4" />
+                  Upgrade
+                </button>
+              )}
+              
+              {/* Premium badge for paid users */}
+              {userProfile?.is_premium && (
+                <span className="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded-lg text-sm font-semibold flex items-center gap-1">
+                  <Crown className="w-4 h-4" />
+                  Premium
+                </span>
+              )}
+              
               <button className="p-2 hover:bg-white/5 rounded-lg transition-colors relative">
                 <Bell className="w-5 h-5" />
                 {activeTrials.some(t => getDaysLeft(t.end_date) <= 3) && (
@@ -221,13 +289,34 @@ export default function Dashboard() {
               className="w-full pl-12 pr-4 py-3 bg-surface-light/50 border border-white/10 rounded-xl focus:outline-none focus:border-accent-cyan/50 text-white placeholder-gray-500"
             />
           </div>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-xl font-semibold text-black hover:opacity-90 transition-opacity"
-          >
-            <Plus className="w-5 h-5" />
-            Add Trial
-          </button>
+          <div className="flex items-center gap-3">
+            {/* Trial limit indicator for free users */}
+            {!userProfile?.is_premium && (
+              <span className="text-sm text-gray-400">
+                {trials.length}/{PLANS.FREE.trialLimit} trials
+              </span>
+            )}
+            
+            <button
+              onClick={() => {
+                if (!userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit) {
+                  alert(`You've reached the limit of ${PLANS.FREE.trialLimit} trials. Upgrade to Premium for unlimited tracking!`)
+                  router.push('/upgrade')
+                  return
+                }
+                setShowAddModal(true)
+              }}
+              className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-opacity ${
+                !userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit
+                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-accent-cyan to-accent-purple text-black hover:opacity-90'
+              }`}
+              disabled={!userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit}
+            >
+              <Plus className="w-5 h-5" />
+              Add Trial
+            </button>
+          </div>
         </div>
 
         {/* Trials List */}
