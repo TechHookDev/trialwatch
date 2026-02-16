@@ -9,6 +9,8 @@ interface AuthContextType {
   loading: boolean
   signInWithGoogle: () => Promise<void>
   signInWithGitHub: () => Promise<void>
+  signInWithEmail: (email: string, password: string) => Promise<void>
+  signUpWithEmail: (email: string, password: string, name: string) => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -40,7 +42,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     })
-    if (error) console.error('Google auth error:', error)
+    if (error) throw error
   }
 
   const signInWithGitHub = async () => {
@@ -50,7 +52,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         redirectTo: `${window.location.origin}/auth/callback`,
       },
     })
-    if (error) console.error('GitHub auth error:', error)
+    if (error) throw error
+  }
+
+  const signInWithEmail = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    })
+    if (error) {
+      if (error.message.includes('Invalid login credentials')) {
+        throw new Error('Invalid email or password. Please try again.')
+      }
+      throw error
+    }
+  }
+
+  const signUpWithEmail = async (email: string, password: string, name: string) => {
+    const { error, data } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          full_name: name,
+        },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+    
+    if (error) {
+      if (error.message.includes('User already registered')) {
+        throw new Error('An account with this email already exists. Please sign in instead.')
+      }
+      throw error
+    }
+
+    // If email confirmation is required
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+      throw new Error('Please check your email to confirm your account before signing in.')
+    }
   }
 
   const signOut = async () => {
@@ -58,7 +98,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signInWithGitHub, signOut }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      signInWithGoogle, 
+      signInWithGitHub, 
+      signInWithEmail,
+      signUpWithEmail,
+      signOut 
+    }}>
       {children}
     </AuthContext.Provider>
   )

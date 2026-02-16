@@ -1,92 +1,27 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Search, Sparkles, Shield, Bell, TrendingUp, CreditCard, ArrowRight } from 'lucide-react'
-import TrialCard from './components/TrialCard'
+import { Search, Sparkles, Shield, Bell, TrendingUp, CreditCard, ArrowRight, Filter } from 'lucide-react'
 import Navbar from './components/Navbar'
+import TrialCard from './components/TrialCard'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-
-const featuredTrials = [
-  {
-    id: '1',
-    name: 'Netflix',
-    category: 'Streaming',
-    trialDays: 30,
-    monthlyPrice: 15.49,
-    rating: 4.8,
-    description: 'Watch unlimited movies and TV shows',
-    color: '#E50914',
-    affiliateUrl: 'https://netflix.com/signup',
-  },
-  {
-    id: '2',
-    name: 'Spotify Premium',
-    category: 'Music',
-    trialDays: 30,
-    monthlyPrice: 10.99,
-    rating: 4.9,
-    description: 'Ad-free music streaming',
-    color: '#1DB954',
-    affiliateUrl: 'https://spotify.com/premium',
-  },
-  {
-    id: '3',
-    name: 'Adobe Creative Cloud',
-    category: 'Productivity',
-    trialDays: 7,
-    monthlyPrice: 54.99,
-    rating: 4.7,
-    description: 'Full suite of creative apps',
-    color: '#FF0000',
-    affiliateUrl: 'https://adobe.com/creativecloud',
-  },
-  {
-    id: '4',
-    name: 'YouTube Premium',
-    category: 'Streaming',
-    trialDays: 30,
-    monthlyPrice: 13.99,
-    rating: 4.6,
-    description: 'No ads, offline playback',
-    color: '#FF0000',
-    affiliateUrl: 'https://youtube.com/premium',
-  },
-  {
-    id: '5',
-    name: 'ChatGPT Plus',
-    category: 'AI Tools',
-    trialDays: 0,
-    monthlyPrice: 20.00,
-    rating: 4.8,
-    description: 'GPT-4 access, faster responses',
-    color: '#10A37F',
-    affiliateUrl: 'https://chat.openai.com',
-  },
-  {
-    id: '6',
-    name: 'Canva Pro',
-    category: 'Design',
-    trialDays: 30,
-    monthlyPrice: 12.99,
-    rating: 4.7,
-    description: 'Professional design tools',
-    color: '#00C4CC',
-    affiliateUrl: 'https://canva.com/pro',
-  },
-]
+import { featuredTrials, trialCategories, getTrialsByCategory, getPopularTrials, searchTrials } from '@/data/trials'
 
 const stats = [
   { label: 'Active Users', value: '10,000+', icon: TrendingUp },
   { label: 'Money Saved', value: '$2.4M+', icon: CreditCard },
   { label: 'Trials Tracked', value: '50,000+', icon: Sparkles },
+  { label: 'Trial Options', value: '53+', icon: Bell },
 ]
 
 export default function Home() {
   const { user } = useAuth()
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('All')
+  const [showFilters, setShowFilters] = useState(false)
 
   const handleGetStarted = () => {
     if (user) {
@@ -96,10 +31,16 @@ export default function Home() {
     }
   }
 
-  const filteredTrials = featuredTrials.filter(trial =>
-    trial.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    trial.category.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  // Get filtered trials
+  let displayedTrials = featuredTrials
+  
+  if (searchQuery) {
+    displayedTrials = searchTrials(searchQuery)
+  } else if (selectedCategory !== 'All') {
+    displayedTrials = getTrialsByCategory(selectedCategory)
+  }
+
+  const popularTrials = getPopularTrials()
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0D1321] via-[#1A1F3A] to-[#0D1321]">
@@ -130,7 +71,7 @@ export default function Home() {
             </h1>
             
             <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-              Discover 50+ premium free trials worth $2,000+. Track them all in one place. 
+              Discover 53+ premium free trials worth $2,000+. Track them all in one place. 
               Get smart alerts before you get charged.
             </p>
             
@@ -150,7 +91,7 @@ export default function Home() {
                 onClick={() => document.getElementById('trials')?.scrollIntoView({ behavior: 'smooth' })}
                 className="px-8 py-4 glass rounded-xl font-semibold text-lg hover:bg-white/10 transition-colors"
               >
-                View All Trials
+                Browse 53+ Trials
               </motion.button>
             </div>
           </motion.div>
@@ -160,7 +101,7 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="mt-20 grid grid-cols-3 gap-8 max-w-3xl mx-auto"
+            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
           >
             {stats.map((stat, index) => (
               <div key={index} className="text-center">
@@ -175,42 +116,132 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Trials Section */}
+      {/* Popular Trials Section */}
+      <section className="px-4 sm:px-6 lg:px-8 py-16 bg-surface/30">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-bold">Most Popular Trials</h2>
+              <p className="text-gray-400 mt-1">These are the trials our users love most</p>
+            </div>
+            <button 
+              onClick={() => document.getElementById('trials')?.scrollIntoView({ behavior: 'smooth' })}
+              className="text-accent-cyan hover:underline font-semibold hidden sm:block"
+            >
+              View All →
+            </button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {popularTrials.slice(0, 6).map((trial, index) => (
+              <TrialCard key={trial.id} trial={trial} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* All Trials Section */}
       <section id="trials" className="px-4 sm:px-6 lg:px-8 py-20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              Discover <span className="gradient-text">Premium</span> Free Trials
+              Discover <span className="gradient-text">53+</span> Free Trials
             </h2>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Hand-picked best free trials. Start with confidence, cancel on time, save money.
+              Hand-picked, verified trials across 13 categories. Start with confidence, cancel on time, save money.
             </p>
           </div>
           
-          {/* Search Bar */}
-          <div className="max-w-2xl mx-auto mb-12">
+          {/* Search & Filters */}
+          <div className="max-w-4xl mx-auto mb-12 space-y-4">
+            {/* Search Bar */}
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
                 type="text"
-                placeholder="Search trials (e.g., Netflix, Spotify, Adobe)..."
+                placeholder="Search trials (e.g., Netflix, Spotify, design tools, AI)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 bg-surface-light/50 border border-white/10 rounded-xl focus:outline-none focus:border-accent-cyan/50 text-white placeholder-gray-500"
+                className="w-full pl-12 pr-12 py-4 bg-surface-light/50 border border-white/10 rounded-xl focus:outline-none focus:border-accent-cyan/50 text-white placeholder-gray-500"
               />
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <Filter className="w-5 h-5 text-gray-400" />
+              </button>
             </div>
+
+            {/* Category Filters */}
+            {showFilters && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="flex flex-wrap gap-2"
+              >
+                {trialCategories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                      selectedCategory === category
+                        ? 'bg-accent-cyan text-black'
+                        : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                    }`}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </motion.div>
+            )}
+
+            {/* Active Filter Display */}
+            {!showFilters && selectedCategory !== 'All' && (
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">Filter:</span>
+                <span className="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded-full text-sm font-medium">
+                  {selectedCategory}
+                </span>
+                <button
+                  onClick={() => setSelectedCategory('All')}
+                  className="text-gray-500 hover:text-white text-sm"
+                >
+                  ✕ Clear
+                </button>
+              </div>
+            )}
+          </div>
+          
+          {/* Results Count */}
+          <div className="mb-6 text-gray-400">
+            Showing {displayedTrials.length} trial{displayedTrials.length !== 1 ? 's' : ''}
+            {searchQuery && ` for "${searchQuery}"`}
+            {selectedCategory !== 'All' && !searchQuery && ` in ${selectedCategory}`}
           </div>
           
           {/* Trial Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredTrials.map((trial, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {displayedTrials.map((trial, index) => (
               <TrialCard key={trial.id} trial={trial} index={index} />
             ))}
           </div>
           
-          {filteredTrials.length === 0 && (
+          {displayedTrials.length === 0 && (
             <div className="text-center py-12">
-              <p className="text-gray-400">No trials found matching &quot;{searchQuery}&quot;</p>
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-xl font-semibold mb-2">No trials found</h3>
+              <p className="text-gray-400">
+                Try adjusting your search or filters to find more trials.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchQuery('')
+                  setSelectedCategory('All')
+                }}
+                className="mt-4 px-6 py-3 bg-accent-cyan/20 text-accent-cyan rounded-xl font-semibold hover:bg-accent-cyan/30 transition-colors"
+              >
+                Clear Filters
+              </button>
             </div>
           )}
         </div>
