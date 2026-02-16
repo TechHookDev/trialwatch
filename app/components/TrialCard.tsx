@@ -21,6 +21,11 @@ interface TrialCardProps {
 }
 
 export default function TrialCard({ trial, index }: TrialCardProps) {
+  const handleStartTrial = () => {
+    // Open affiliate link in new tab
+    window.open(trial.affiliateUrl, '_blank', 'noopener,noreferrer')
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -65,7 +70,10 @@ export default function TrialCard({ trial, index }: TrialCardProps) {
       </div>
 
       {/* CTA */}
-      <button className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent-cyan/50 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 group-hover:bg-gradient-to-r group-hover:from-accent-cyan/20 group-hover:to-accent-purple/20">
+      <button
+        onClick={handleStartTrial}
+        className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-accent-cyan/50 rounded-xl font-semibold transition-all flex items-center justify-center gap-2 group-hover:bg-gradient-to-r group-hover:from-accent-cyan/20 group-hover:to-accent-purple/20"
+      >
         Start Free Trial
         <ExternalLink className="w-4 h-4" />
       </button>

@@ -1,9 +1,12 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Search, Sparkles, Shield, Bell, TrendingUp, CreditCard } from 'lucide-react'
+import { Search, Sparkles, Shield, Bell, TrendingUp, CreditCard, ArrowRight } from 'lucide-react'
 import TrialCard from './components/TrialCard'
 import Navbar from './components/Navbar'
+import { useAuth } from '@/contexts/AuthContext'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 const featuredTrials = [
   {
@@ -81,6 +84,23 @@ const stats = [
 ]
 
 export default function Home() {
+  const { user } = useAuth()
+  const router = useRouter()
+  const [searchQuery, setSearchQuery] = useState('')
+
+  const handleGetStarted = () => {
+    if (user) {
+      router.push('/dashboard')
+    } else {
+      router.push('/login')
+    }
+  }
+
+  const filteredTrials = featuredTrials.filter(trial =>
+    trial.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    trial.category.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0D1321] via-[#1A1F3A] to-[#0D1321]">
       <Navbar />
@@ -118,14 +138,16 @@ export default function Home() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={handleGetStarted}
                 className="px-8 py-4 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-xl font-bold text-lg text-black shadow-lg shadow-accent-cyan/30 hover:shadow-accent-cyan/50 transition-shadow"
               >
-                Start Tracking Free
+                {user ? 'Go to Dashboard' : 'Start Tracking Free'}
               </motion.button>
               
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => document.getElementById('trials')?.scrollIntoView({ behavior: 'smooth' })}
                 className="px-8 py-4 glass rounded-xl font-semibold text-lg hover:bg-white/10 transition-colors"
               >
                 View All Trials
@@ -154,7 +176,7 @@ export default function Home() {
       </section>
 
       {/* Featured Trials Section */}
-      <section className="px-4 sm:px-6 lg:px-8 py-20">
+      <section id="trials" className="px-4 sm:px-6 lg:px-8 py-20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
@@ -172,6 +194,8 @@ export default function Home() {
               <input
                 type="text"
                 placeholder="Search trials (e.g., Netflix, Spotify, Adobe)..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-12 pr-4 py-4 bg-surface-light/50 border border-white/10 rounded-xl focus:outline-none focus:border-accent-cyan/50 text-white placeholder-gray-500"
               />
             </div>
@@ -179,16 +203,16 @@ export default function Home() {
           
           {/* Trial Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredTrials.map((trial, index) => (
+            {filteredTrials.map((trial, index) => (
               <TrialCard key={trial.id} trial={trial} index={index} />
             ))}
           </div>
           
-          <div className="text-center mt-12">
-            <button className="px-8 py-3 glass rounded-xl font-semibold hover:bg-white/10 transition-colors">
-              View All 50+ Trials →
-            </button>
-          </div>
+          {filteredTrials.length === 0 && (
+            <div className="text-center py-12">
+              <p className="text-gray-400">No trials found matching &quot;{searchQuery}&quot;</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -252,8 +276,11 @@ export default function Home() {
             <p className="text-xl text-gray-400 mb-8">
               Join 10,000+ users who never pay for forgotten trials again.
             </p>
-            <button className="px-10 py-5 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-xl font-bold text-lg text-black shadow-lg shadow-accent-cyan/30 hover:shadow-accent-cyan/50 transition-all hover:scale-105">
-              Get Started Free →
+            <button
+              onClick={handleGetStarted}
+              className="px-10 py-5 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-xl font-bold text-lg text-black shadow-lg shadow-accent-cyan/30 hover:shadow-accent-cyan/50 transition-all hover:scale-105"
+            >
+              {user ? 'Go to Dashboard' : 'Get Started Free'} <ArrowRight className="inline w-5 h-5 ml-2" />
             </button>
             <p className="mt-4 text-sm text-gray-500">
               No credit card required. Track 3 trials free forever.
