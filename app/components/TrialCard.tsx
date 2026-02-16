@@ -11,7 +11,7 @@ interface TrialCardProps {
 
 export default function TrialCard({ trial, index }: TrialCardProps) {
   const handleStartTrial = () => {
-    window.open(trial.affiliateUrl, '_blank', 'noopener,noreferrer')
+    window.open(trial.signupUrl, '_blank', 'noopener,noreferrer')
   }
 
   // Format trial days text
