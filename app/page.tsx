@@ -7,7 +7,7 @@ import TrialCard from './components/TrialCard'
 import { useAuth } from '@/contexts/AuthContext'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { featuredTrials, trialCategories, getTrialsByCategory, getPopularTrials, searchTrials } from '@/data/trials'
+import { featuredTrials, trialCategories, getTrialsByCategory, searchTrials } from '@/data/trials'
 
 const stats = [
   { label: 'Active Users', value: '10,000+', icon: TrendingUp },
@@ -39,8 +39,6 @@ export default function Home() {
   } else if (selectedCategory !== 'All') {
     displayedTrials = getTrialsByCategory(selectedCategory)
   }
-
-  const popularTrials = getPopularTrials()
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0D1321] via-[#1A1F3A] to-[#0D1321]">
@@ -113,30 +111,6 @@ export default function Home() {
               </div>
             ))}
           </motion.div>
-        </div>
-      </section>
-
-      {/* Popular Trials Section */}
-      <section className="px-4 sm:px-6 lg:px-8 py-16 bg-surface/30">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold">Most Popular Trials</h2>
-              <p className="text-gray-400 mt-1">These are the trials our users love most</p>
-            </div>
-            <button 
-              onClick={() => document.getElementById('trials')?.scrollIntoView({ behavior: 'smooth' })}
-              className="text-accent-cyan hover:underline font-semibold hidden sm:block"
-            >
-              View All →
-            </button>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {popularTrials.slice(0, 6).map((trial, index) => (
-              <TrialCard key={trial.id} trial={trial} index={index} />
-            ))}
-          </div>
         </div>
       </section>
 
