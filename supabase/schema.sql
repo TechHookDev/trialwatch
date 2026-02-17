@@ -109,13 +109,40 @@ CREATE TABLE revenue_events (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
 );
 
+-- Table for push notification subscriptions
+CREATE TABLE push_subscriptions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  endpoint TEXT NOT NULL,
+  p256dh TEXT NOT NULL,
+  auth TEXT NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now()
+);
+
+-- Enable RLS on push_subscriptions
+ALTER TABLE push_subscriptions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can only see their own push subscriptions" 
+  ON push_subscriptions FOR SELECT 
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can only insert their own push subscriptions" 
+  ON push_subscriptions FOR INSERT 
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can only delete their own push subscriptions" 
+  ON push_subscriptions FOR DELETE 
+  USING (auth.uid() = user_id);
+
 -- Indexes for performance
 CREATE INDEX idx_user_profiles_user_id ON user_profiles(id);
 CREATE INDEX idx_notifications_user_id ON notifications(user_id);
 CREATE INDEX idx_notifications_trial_id ON notifications(trial_id);
 CREATE INDEX idx_revenue_events_user_id ON revenue_events(user_id);
 CREATE INDEX idx_revenue_events_created_at ON revenue_events(created_at);
+CREATE INDEX idx_push_subscriptions_user_id ON push_subscriptions(user_id);
 
 -- Add to realtime
 alter publication supabase_realtime add table user_profiles;
 alter publication supabase_realtime add table notifications;
+alter publication supabase_realtime add table push_subscriptions;

@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { motion } from 'framer-motion'
-import { Plus, Search, Bell, LogOut, CreditCard, Calendar, TrendingUp, Clock, ExternalLink, Trash2, Crown } from 'lucide-react'
+import { Plus, Search, LogOut, CreditCard, Calendar, TrendingUp, Clock, ExternalLink, Trash2, Crown } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { PLANS } from '@/lib/premium'
+import NotificationBell from '@/app/components/NotificationBell'
 
 interface Trial {
   id: string
@@ -226,12 +227,7 @@ export default function Dashboard() {
                 </span>
               )}
               
-              <button className="p-2 hover:bg-white/5 rounded-lg transition-colors relative">
-                <Bell className="w-5 h-5" />
-                {activeTrials.some(t => getDaysLeft(t.end_date) <= 3) && (
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-accent-red rounded-full"></span>
-                )}
-              </button>
+              <NotificationBell />
               <button onClick={() => signOut()} className="p-2 hover:bg-white/5 rounded-lg transition-colors">
                 <LogOut className="w-5 h-5" />
               </button>
