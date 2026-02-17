@@ -10,10 +10,16 @@ export default function AuthCallbackContent() {
   const supabase = createClient()
 
   useEffect(() => {
+    console.log('Callback: Page loaded, URL:', window.location.href)
+    console.log('Callback: Domain:', window.location.hostname)
+    
     const handleCallback = async () => {
       const code = searchParams.get('code')
       const error = searchParams.get('error')
       const error_description = searchParams.get('error_description')
+      
+      console.log('Callback: Code present:', !!code)
+      console.log('Callback: Error present:', error)
 
       if (error) {
         console.error('Auth error:', error, error_description)
