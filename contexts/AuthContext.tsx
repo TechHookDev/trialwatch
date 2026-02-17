@@ -1,8 +1,8 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
-import { User } from '@supabase/supabase-js'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { User, Session } from '@supabase/supabase-js'
 
 interface AuthContextType {
   user: User | null
@@ -19,6 +19,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const supabase = createClientComponentClient()
 
   useEffect(() => {
     // Check active session
@@ -33,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     })
 
     return () => subscription.unsubscribe()
-  }, [])
+  }, [supabase])
 
   const signInWithGoogle = async () => {
     const { error } = await supabase.auth.signInWithOAuth({
@@ -79,7 +80,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     })
-    
+
     if (error) {
       if (error.message.includes('User already registered')) {
         throw new Error('An account with this email already exists. Please sign in instead.')
@@ -98,14 +99,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      loading, 
-      signInWithGoogle, 
-      signInWithGitHub, 
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      signInWithGoogle,
+      signInWithGitHub,
       signInWithEmail,
       signUpWithEmail,
-      signOut 
+      signOut
     }}>
       {children}
     </AuthContext.Provider>
