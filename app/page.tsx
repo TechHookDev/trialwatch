@@ -58,7 +58,7 @@ export default function Home() {
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-sm font-medium mb-8">
               <Sparkles className="w-4 h-4" />
-              Join the beta - help shape the future
+              Stop losing money on forgotten subscriptions
             </span>
 
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
