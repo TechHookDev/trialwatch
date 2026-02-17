@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { createClient } from '@/lib/supabase/client'
+import { supabase } from '@/lib/supabase'
 import { motion } from 'framer-motion'
 import { Plus, Search, LogOut, CreditCard, Calendar, TrendingUp, Clock, ExternalLink, Trash2, Crown } from 'lucide-react'
 import Image from 'next/image'
@@ -30,7 +30,6 @@ interface UserProfile {
 export default function Dashboard() {
   const { user, signOut } = useAuth()
   const router = useRouter()
-  const supabase = createClient()
   const [trials, setTrials] = useState<Trial[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
