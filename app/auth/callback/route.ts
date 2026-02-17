@@ -6,6 +6,9 @@ export async function GET(request: NextRequest) {
     const code = searchParams.get('code')
     const next = searchParams.get('next') ?? '/dashboard'
     const origin = request.nextUrl.origin
+    
+    console.log('Auth callback hit:', { url: request.url, origin, code: code ? 'present' : 'missing', next })
+    console.log('Cookies:', request.cookies.getAll().map(c => c.name))
 
     if (code) {
         // Create a response object that we can modify
