@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/contexts/AuthContext'
-import { supabase } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 import { motion } from 'framer-motion'
 import { Plus, Search, LogOut, CreditCard, Calendar, TrendingUp, Clock, ExternalLink, Trash2, Crown } from 'lucide-react'
 import Image from 'next/image'
@@ -30,6 +30,7 @@ interface UserProfile {
 export default function Dashboard() {
   const { user, signOut } = useAuth()
   const router = useRouter()
+  const supabase = createClient()
   const [trials, setTrials] = useState<Trial[]>([])
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
@@ -332,8 +333,8 @@ export default function Dashboard() {
                 setShowAddModal(true)
               }}
               className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-opacity ${!userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit
-                  ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
-                  : 'bg-gradient-to-r from-accent-cyan to-accent-purple text-black hover:opacity-90'
+                ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
+                : 'bg-gradient-to-r from-accent-cyan to-accent-purple text-black hover:opacity-90'
                 }`}
               disabled={!userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit}
             >
@@ -405,10 +406,10 @@ export default function Dashboard() {
                   <div className="flex items-center gap-4">
                     {trial.status === 'active' && (
                       <span className={`px-3 py-1 rounded-full text-sm font-semibold ${isExpiring
-                          ? 'bg-accent-red/20 text-accent-red'
-                          : daysLeft <= 7
-                            ? 'bg-accent-amber/20 text-accent-amber'
-                            : 'bg-accent-green/20 text-accent-green'
+                        ? 'bg-accent-red/20 text-accent-red'
+                        : daysLeft <= 7
+                          ? 'bg-accent-amber/20 text-accent-amber'
+                          : 'bg-accent-green/20 text-accent-green'
                         }`}>
                         {isExpiring ? `${daysLeft} days left!` : `${daysLeft} days left`}
                       </span>

@@ -2,12 +2,12 @@
 
 import { useEffect, useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createClient } from '@/lib/supabase/client'
 
 function CallbackContent() {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const supabase = createClientComponentClient()
+    const supabase = createClient()
     const [status, setStatus] = useState('Initializing...')
     const [debugInfo, setDebugInfo] = useState<any>({})
 
