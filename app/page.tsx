@@ -9,11 +9,12 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { featuredTrials, trialCategories, getTrialsByCategory, searchTrials } from '@/data/trials'
 
+// Honest stats - only show what we actually have
 const stats = [
-  { label: 'Active Users', value: '10,000+', icon: TrendingUp },
-  { label: 'Money Saved', value: '$2.4M+', icon: CreditCard },
-  { label: 'Trials Tracked', value: '50,000+', icon: Sparkles },
-  { label: 'Trial Options', value: '95+', icon: Bell },
+  { label: 'Verified Services', value: '95+', icon: TrendingUp },
+  { label: 'Categories', value: '16', icon: CreditCard },
+  { label: 'Free to Start', value: '$0', icon: Sparkles },
+  { label: 'Track Free Trials', value: '3', icon: Search },
 ]
 
 export default function Home() {
@@ -57,7 +58,7 @@ export default function Home() {
           >
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent-cyan/10 border border-accent-cyan/30 text-accent-cyan text-sm font-medium mb-8">
               <Sparkles className="w-4 h-4" />
-              Save an average of $240/year
+              Join the beta - help shape the future
             </span>
             
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
@@ -68,8 +69,8 @@ export default function Home() {
             </h1>
             
             <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-              Discover 95+ verified premium trials worth $2,000+. Track them all in one place. 
-              Get smart alerts before you get charged.
+              We verify every trial so you don't waste time on broken links or expired offers. 
+              Track up to 3 trials free, unlimited with Premium. No surprises, no hidden fees.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
