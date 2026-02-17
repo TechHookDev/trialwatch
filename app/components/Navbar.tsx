@@ -17,24 +17,24 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto">
         <div className="glass rounded-2xl px-6 py-3 flex items-center justify-between">
           {/* Logo */}
-          <div 
+          <div
             className="flex items-center gap-3 cursor-pointer"
             onClick={() => router.push('/')}
           >
-            <Image 
-              src="/logo.png" 
-              alt="TrialWatch" 
-              width={40} 
+            <Image
+              src="/logo.png"
+              alt="Trials Watch"
+              width={40}
               height={40}
               className="rounded-xl"
             />
-            <span className="text-xl font-bold">TrialWatch</span>
+            <span className="text-xl font-bold">Trials Watch</span>
           </div>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8">
-            <a 
-              href="/#trials" 
+            <a
+              href="/#trials"
               onClick={(e) => {
                 e.preventDefault()
                 document.getElementById('trials')?.scrollIntoView({ behavior: 'smooth' })
@@ -44,7 +44,7 @@ export default function Navbar() {
               Discover
             </a>
             {user && (
-              <button 
+              <button
                 onClick={() => router.push('/dashboard')}
                 className="text-gray-300 hover:text-white transition-colors"
               >
@@ -56,7 +56,7 @@ export default function Navbar() {
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
             {user ? (
-              <button 
+              <button
                 onClick={() => router.push('/dashboard')}
                 className="px-4 py-2 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-lg font-semibold text-black text-sm hover:opacity-90 transition-opacity"
               >
@@ -64,13 +64,13 @@ export default function Navbar() {
               </button>
             ) : (
               <>
-                <button 
+                <button
                   onClick={() => router.push('/login')}
                   className="text-gray-300 hover:text-white transition-colors"
                 >
                   Sign In
                 </button>
-                <button 
+                <button
                   onClick={() => router.push('/login')}
                   className="px-4 py-2 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-lg font-semibold text-black text-sm hover:opacity-90 transition-opacity"
                 >
@@ -81,7 +81,7 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <button 
+          <button
             className="md:hidden p-2"
             onClick={() => setIsOpen(!isOpen)}
           >
@@ -97,7 +97,7 @@ export default function Navbar() {
             className="md:hidden mt-2 glass rounded-2xl p-6"
           >
             <div className="flex flex-col gap-4">
-              <a 
+              <a
                 href="/#trials"
                 onClick={(e) => {
                   e.preventDefault()
@@ -109,7 +109,7 @@ export default function Navbar() {
                 Discover
               </a>
               {user && (
-                <button 
+                <button
                   onClick={() => {
                     router.push('/dashboard')
                     setIsOpen(false)
@@ -121,7 +121,7 @@ export default function Navbar() {
               )}
               <hr className="border-white/10" />
               {user ? (
-                <button 
+                <button
                   onClick={() => {
                     router.push('/dashboard')
                     setIsOpen(false)
@@ -132,7 +132,7 @@ export default function Navbar() {
                 </button>
               ) : (
                 <>
-                  <button 
+                  <button
                     onClick={() => {
                       router.push('/login')
                       setIsOpen(false)
@@ -141,7 +141,7 @@ export default function Navbar() {
                   >
                     Sign In
                   </button>
-                  <button 
+                  <button
                     onClick={() => {
                       router.push('/login')
                       setIsOpen(false)

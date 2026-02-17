@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Search, Sparkles, TrendingUp, CreditCard } from 'lucide-react'
+import { Search, Sparkles, TrendingUp, CreditCard, Bell, Shield, ArrowRight } from 'lucide-react'
 import Navbar from './components/Navbar'
 import TrialCard from './components/TrialCard'
 import { useAuth } from '@/contexts/AuthContext'
@@ -33,7 +33,7 @@ export default function Home() {
 
   // Get filtered trials
   let displayedTrials = featuredTrials
-  
+
   if (searchQuery) {
     displayedTrials = searchTrials(searchQuery)
   } else if (selectedCategory !== 'All') {
@@ -43,13 +43,13 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#0D1321] via-[#1A1F3A] to-[#0D1321]">
       <Navbar />
-      
+
       {/* Hero Section */}
       <section className="relative px-4 sm:px-6 lg:px-8 pt-20 pb-32 overflow-hidden">
         {/* Background Effects */}
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-accent-cyan/20 rounded-full blur-[128px] animate-pulse-slow" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent-purple/20 rounded-full blur-[128px] animate-pulse-slow" />
-        
+
         <div className="relative max-w-7xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -60,19 +60,19 @@ export default function Home() {
               <Sparkles className="w-4 h-4" />
               Join the beta - help shape the future
             </span>
-            
+
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
               Stop Paying for{' '}
               <span className="gradient-text">Forgotten</span>
               <br />
               Free Trials
             </h1>
-            
+
             <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-10">
-              We verify every trial so you don't waste time on broken links or expired offers. 
+              We verify every trial so you don't waste time on broken links or expired offers.
               Track up to 3 trials free, unlimited with Premium. No surprises, no hidden fees.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -82,7 +82,7 @@ export default function Home() {
               >
                 {user ? 'Go to Dashboard' : 'Start Tracking Free'}
               </motion.button>
-              
+
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -93,7 +93,7 @@ export default function Home() {
               </motion.button>
             </div>
           </motion.div>
-          
+
           {/* Stats */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -125,7 +125,7 @@ export default function Home() {
               Hand-picked, verified trials across 16 categories. Start with confidence, cancel on time, save money.
             </p>
           </div>
-          
+
           {/* Search & Filters */}
           <div className="max-w-4xl mx-auto mb-12 space-y-4">
             {/* Search Bar */}
@@ -146,11 +146,10 @@ export default function Home() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                    selectedCategory === category
-                      ? 'bg-accent-cyan text-black'
-                      : 'bg-white/5 text-gray-300 hover:bg-white/10'
-                  }`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selectedCategory === category
+                    ? 'bg-accent-cyan text-black'
+                    : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                    }`}
                 >
                   {category}
                 </button>
@@ -173,21 +172,21 @@ export default function Home() {
               </div>
             )}
           </div>
-          
+
           {/* Results Count */}
           <div className="mb-6 text-gray-400">
             Showing {displayedTrials.length} trial{displayedTrials.length !== 1 ? 's' : ''}
             {searchQuery && ` for "${searchQuery}"`}
             {selectedCategory !== 'All' && !searchQuery && ` in ${selectedCategory}`}
           </div>
-          
+
           {/* Trial Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {displayedTrials.map((trial, index) => (
               <TrialCard key={trial.id} trial={trial} index={index} />
             ))}
           </div>
-          
+
           {displayedTrials.length === 0 && (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">🔍</div>
@@ -214,10 +213,10 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-3xl sm:text-4xl font-bold mb-4">
-              How TrialWatch <span className="gradient-text">Saves</span> You Money
+              How Trials Watch <span className="gradient-text">Saves</span> You Money
             </h2>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               {
@@ -285,7 +284,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="px-4 sm:px-6 lg:px-8 py-12 border-t border-white/10">
         <div className="max-w-7xl mx-auto text-center text-gray-500">
-          <p className="mb-2">© 2024 TrialWatch. All rights reserved.</p>
+          <p className="mb-2">© 2024 Trials Watch. All rights reserved.</p>
           <p className="text-sm">
             Made with ❤️ to help you save money on subscriptions.
           </p>

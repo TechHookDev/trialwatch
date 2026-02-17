@@ -7,8 +7,8 @@ import ClientProviders from './components/ClientProviders'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'TrialWatch - Never Pay for Forgotten Trials Again',
-  description: 'Discover the best free trials and track them all in one place. Get alerts before you get charged. Save $240+ per year.',
+  title: 'Trials Watch - Never Pay for Forgotten Trials Again',
+  description: 'Discover the best free trials and track them all in one place. Get alerts before you get charged. Save $240+ per year with Trials Watch.',
   keywords: 'free trials, subscription tracker, trial reminder, save money, Netflix trial, Spotify trial',
 }
 

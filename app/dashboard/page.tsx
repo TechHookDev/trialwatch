@@ -206,11 +206,11 @@ export default function Dashboard() {
               <Image src="/logo.png" alt="TrialWatch" width={40} height={40} className="rounded-xl" />
               <span className="text-xl font-bold">TrialWatch</span>
             </div>
-            
+
             <div className="flex items-center gap-4">
               {/* Upgrade button for free users */}
               {!userProfile?.is_premium && (
-                <button 
+                <button
                   onClick={() => router.push('/upgrade')}
                   className="px-4 py-2 bg-accent-cyan/20 text-accent-cyan rounded-lg font-semibold text-sm hover:bg-accent-cyan/30 transition-colors flex items-center gap-2"
                 >
@@ -218,7 +218,7 @@ export default function Dashboard() {
                   Upgrade
                 </button>
               )}
-              
+
               {/* Premium badge for paid users */}
               {userProfile?.is_premium && (
                 <span className="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded-lg text-sm font-semibold flex items-center gap-1">
@@ -226,7 +226,7 @@ export default function Dashboard() {
                   Premium
                 </span>
               )}
-              
+
               <NotificationBell />
               <button onClick={() => signOut()} className="p-2 hover:bg-white/5 rounded-lg transition-colors">
                 <LogOut className="w-5 h-5" />
@@ -240,6 +240,35 @@ export default function Dashboard() {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Savings Banner */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass rounded-2xl p-8 mb-8 relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-64 h-64 bg-accent-cyan/10 rounded-full blur-[64px] -mr-32 -mt-32" />
+          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h2 className="text-2xl font-bold mb-2">
+                You're tracking <span className="text-accent-cyan">${moneyAtRisk.toFixed(2)}/mo</span> in free trials.
+              </h2>
+              <p className="text-gray-400 text-lg">
+                That's <span className="text-white font-bold">${(moneyAtRisk * 12).toFixed(2)}</span> per year you could save by cancelling on time!
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              {!userProfile?.is_premium && (
+                <button
+                  onClick={() => router.push('/upgrade')}
+                  className="px-6 py-3 bg-gradient-to-r from-accent-cyan to-accent-purple rounded-xl font-bold text-black shadow-lg shadow-accent-cyan/20 hover:shadow-accent-cyan/40 transition-all hover:scale-105"
+                >
+                  Protect My Savings
+                </button>
+              )}
+            </div>
+          </div>
+        </motion.div>
+
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass rounded-2xl p-6">
@@ -292,7 +321,7 @@ export default function Dashboard() {
                 {trials.length}/{PLANS.FREE.trialLimit} trials
               </span>
             )}
-            
+
             <button
               onClick={() => {
                 if (!userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit) {
@@ -302,11 +331,10 @@ export default function Dashboard() {
                 }
                 setShowAddModal(true)
               }}
-              className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-opacity ${
-                !userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit
+              className={`flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-opacity ${!userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit
                   ? 'bg-gray-600 text-gray-400 cursor-not-allowed'
                   : 'bg-gradient-to-r from-accent-cyan to-accent-purple text-black hover:opacity-90'
-              }`}
+                }`}
               disabled={!userProfile?.is_premium && trials.length >= PLANS.FREE.trialLimit}
             >
               <Plus className="w-5 h-5" />
@@ -318,7 +346,7 @@ export default function Dashboard() {
         {/* Trials List */}
         <div className="space-y-4">
           <h2 className="text-xl font-bold mb-4">Your Trials ({filteredTrials.length})</h2>
-          
+
           {filteredTrials.length === 0 ? (
             <div className="glass rounded-2xl p-12 text-center">
               <div className="text-6xl mb-4">📱</div>
@@ -343,16 +371,15 @@ export default function Dashboard() {
             filteredTrials.map((trial, index) => {
               const daysLeft = getDaysLeft(trial.end_date)
               const isExpiring = daysLeft <= 3 && trial.status === 'active'
-              
+
               return (
                 <motion.div
                   key={trial.id}
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.3, delay: index * 0.1 }}
-                  className={`glass rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 ${
-                    isExpiring ? 'border-accent-red/50 border' : ''
-                  }`}
+                  className={`glass rounded-2xl p-6 flex flex-col md:flex-row md:items-center justify-between gap-4 ${isExpiring ? 'border-accent-red/50 border' : ''
+                    }`}
                 >
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center text-xl font-bold">
@@ -377,13 +404,12 @@ export default function Dashboard() {
 
                   <div className="flex items-center gap-4">
                     {trial.status === 'active' && (
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                        isExpiring 
-                          ? 'bg-accent-red/20 text-accent-red' 
-                          : daysLeft <= 7 
+                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${isExpiring
+                          ? 'bg-accent-red/20 text-accent-red'
+                          : daysLeft <= 7
                             ? 'bg-accent-amber/20 text-accent-amber'
                             : 'bg-accent-green/20 text-accent-green'
-                      }`}>
+                        }`}>
                         {isExpiring ? `${daysLeft} days left!` : `${daysLeft} days left`}
                       </span>
                     )}
@@ -392,7 +418,7 @@ export default function Dashboard() {
                         Cancelled
                       </span>
                     )}
-                    
+
                     <div className="flex gap-2">
                       {trial.service_url && (
                         <a
@@ -436,7 +462,7 @@ export default function Dashboard() {
             className="glass rounded-2xl p-6 max-w-md w-full"
           >
             <h2 className="text-2xl font-bold mb-6">Add New Trial</h2>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-2">Service Name *</label>
