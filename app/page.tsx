@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Search, Sparkles, Shield, Bell, TrendingUp, CreditCard, ArrowRight, Filter } from 'lucide-react'
+import { Search, Sparkles, TrendingUp, CreditCard } from 'lucide-react'
 import Navbar from './components/Navbar'
 import TrialCard from './components/TrialCard'
 import { useAuth } from '@/contexts/AuthContext'
@@ -21,7 +21,6 @@ export default function Home() {
   const router = useRouter()
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState('All')
-  const [showFilters, setShowFilters] = useState(false)
 
   const handleGetStarted = () => {
     if (user) {
@@ -136,41 +135,29 @@ export default function Home() {
                 placeholder="Search trials (e.g., Netflix, Spotify, design tools, AI)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-12 py-4 bg-surface-light/50 border border-white/10 rounded-xl focus:outline-none focus:border-accent-cyan/50 text-white placeholder-gray-500"
+                className="w-full pl-12 pr-4 py-4 bg-surface-light/50 border border-white/10 rounded-xl focus:outline-none focus:border-accent-cyan/50 text-white placeholder-gray-500"
               />
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 hover:bg-white/10 rounded-lg transition-colors"
-              >
-                <Filter className="w-5 h-5 text-gray-400" />
-              </button>
             </div>
 
-            {/* Category Filters */}
-            {showFilters && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                className="flex flex-wrap gap-2"
-              >
-                {trialCategories.map((category) => (
-                  <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
-                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                      selectedCategory === category
-                        ? 'bg-accent-cyan text-black'
-                        : 'bg-white/5 text-gray-300 hover:bg-white/10'
-                    }`}
-                  >
-                    {category}
-                  </button>
-                ))}
-              </motion.div>
-            )}
+            {/* Category Filters - Always Visible */}
+            <div className="flex flex-wrap gap-2">
+              {trialCategories.map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setSelectedCategory(category)}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    selectedCategory === category
+                      ? 'bg-accent-cyan text-black'
+                      : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                  }`}
+                >
+                  {category}
+                </button>
+              ))}
+            </div>
 
-            {/* Active Filter Display */}
-            {!showFilters && selectedCategory !== 'All' && (
+            {/* Clear Filter Button */}
+            {selectedCategory !== 'All' && (
               <div className="flex items-center gap-2">
                 <span className="text-gray-400">Filter:</span>
                 <span className="px-3 py-1 bg-accent-cyan/20 text-accent-cyan rounded-full text-sm font-medium">

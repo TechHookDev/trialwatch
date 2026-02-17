@@ -1385,7 +1385,7 @@ export const verifiedTrials: Trial[] = [
 
 export const popularTrials = verifiedTrials.filter(t => t.popular)
 export const trialsWithFreeTrial = verifiedTrials.filter(t => t.trialDays > 0)
-export const featuredTrials = verifiedTrials.slice(0, 12)
+export const featuredTrials = verifiedTrials.slice(0, 8)
 
 // Helper functions
 export function getTrialsByCategory(category: string): Trial[] {
