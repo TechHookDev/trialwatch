@@ -23,10 +23,11 @@ export default function AuthCallbackContent() {
 
             if (code) {
                 try {
+                    console.log('Exchanging code for session, origin:', window.location.origin)
                     const { error: sessionError } = await supabase.auth.exchangeCodeForSession(code)
                     if (sessionError) {
-                        console.error('Session error:', sessionError)
-                        router.push('/login?error=session_exchange_failed')
+                        console.error('Session error details:', sessionError.message, sessionError.name, sessionError.cause)
+                        router.push(`/login?error=${encodeURIComponent(sessionError.message || 'session_exchange_failed')}`)
                         return
                     }
                     // Success!
