@@ -20,7 +20,7 @@ Your code is deployed automatically, but your **secrets** (API keys) are not. Th
 
 | Key | Value |
 | :--- | :--- |
-| `RESEND_API_KEY` | `re_8tckoE5C_5wNeYeijaGxorKHrvc3mZ26U` |
+| `RESEND_API_KEY` | *(Your Resend API Key)* |
 | `SUPABASE_SERVICE_ROLE_KEY` | *(Paste the key you copied from Supabase)* |
 | `NEXT_PUBLIC_SUPABASE_URL` | *(You can find this in Supabase > Settings > API > Project URL)* |
 
