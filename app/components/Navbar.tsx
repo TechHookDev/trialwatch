@@ -22,7 +22,7 @@ export default function Navbar() {
             onClick={() => router.push('/')}
           >
             <Image
-              src="/logo.png"
+              src="/logo.svg"
               alt="Trials Watch"
               width={40}
               height={40}

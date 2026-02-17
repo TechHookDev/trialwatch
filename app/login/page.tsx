@@ -56,7 +56,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="mb-8 flex justify-center">
           <Image
-            src="/logo.png"
+            src="/logo.svg"
             alt="TrialWatch"
             width={100}
             height={100}
@@ -68,8 +68,8 @@ export default function LoginPage() {
           {isSignUp ? 'Create Account' : 'Welcome Back'}
         </h1>
         <p className="text-gray-400 mb-8 text-center">
-          {isSignUp 
-            ? 'Sign up to start tracking your free trials' 
+          {isSignUp
+            ? 'Sign up to start tracking your free trials'
             : 'Sign in to continue tracking your trials'}
         </p>
 
